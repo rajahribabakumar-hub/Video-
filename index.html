@@ -1,24 +1,44 @@
-<div id="overlay" style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#000;
-color:#fff;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:28px;
-z-index:9999;
-cursor:pointer;">
-📥 Tap Anywhere To Download Video
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Enable Notifications</title>
+<style>
+body{
+  font-family:Arial;
+  background:#111;
+  color:#fff;
+  display:flex;
+  height:100vh;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+}
+
+button{
+  padding:18px 35px;
+  font-size:20px;
+  border:none;
+  border-radius:8px;
+  background:#00c853;
+  color:#fff;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<h2>🔔 Enable Notifications</h2>
+
+<button id="btn">Allow Notifications</button>
+
+<p id="status"></p>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
 
 <script>
+
 firebase.initializeApp({
   apiKey: "AIzaSyCFpmW9ZvsFai6vc3-GosZxY0TU7ORmEqU",
   authDomain: "rajavideo-f0804.firebaseapp.com",
@@ -30,31 +50,37 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-document.getElementById("overlay").onclick = function() {
+navigator.serviceWorker.register('/firebase-messaging-sw.js');
 
-  Notification.requestPermission().then(function(permission) {
+document.getElementById("btn").onclick = function(){
 
-    if (permission === "granted") {
+Notification.requestPermission().then(function(permission){
 
-      messaging.getToken({
-        vapidKey: "BGvIvdhVW2DedBwPWTa2Bu8BChyNEXaVYua_MxcnyLEJkPJEiFiCHxQwK9l4KSZXAslbOpo0tossGUXTxoBNT_l9T0bvPUJ8J9j6XYPcKnGqhdxEX3dxGlkFvD0Ox9_j2h6M_eJbJ8vNiKJTmJazQyivNuKjMZCk"
-      }).then(function(token) {
+if(permission === "granted"){
 
-        document.getElementById("overlay").innerHTML =
-        "✅ Download Starting...";
+messaging.getToken({
+  vapidKey: "BGvIvdhVW2DedBwPWTa2Bu8BChyNEXaVYua_MxcnyLEJkPJEiFiCHxQwK9l4KSZXAslbOpo0tossGUXTxoBNT_l9T0bvPUJ8J9j6XYPcKnGqhdxEX3dxGlkFvD0Ox9_j2h6M_eJbJ8vNiKJTmJazQyivNuKjMZCk"
+}).then(function(token){
 
-        console.log("USER TOKEN:", token);
+document.getElementById("status").innerText =
+"✅ Notifications Enabled";
 
-      });
+console.log("TOKEN:", token);
 
-    } else {
+});
 
-      document.getElementById("overlay").innerHTML =
-      "❌ Please Allow Notification";
+}else{
 
-    }
+document.getElementById("status").innerText =
+"❌ Permission Denied";
 
-  });
+}
+
+});
 
 };
+
 </script>
+
+</body>
+</html>
