@@ -1,0 +1,60 @@
+<div id="overlay" style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+z-index:9999;
+cursor:pointer;">
+📥 Tap Anywhere To Download Video
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyCFpmW9ZvsFai6vc3-GosZxY0TU7ORmEqU",
+  authDomain: "rajavideo-f0804.firebaseapp.com",
+  projectId: "rajavideo-f0804",
+  storageBucket: "rajavideo-f0804.firebasestorage.app",
+  messagingSenderId: "1000952755183",
+  appId: "1:1000952755183:web:96aba391983d11315bfc1a"
+});
+
+const messaging = firebase.messaging();
+
+document.getElementById("overlay").onclick = function() {
+
+  Notification.requestPermission().then(function(permission) {
+
+    if (permission === "granted") {
+
+      messaging.getToken({
+        vapidKey: "BGvIvdhVW2DedBwPWTa2Bu8BChyNEXaVYua_MxcnyLEJkPJEiFiCHxQwK9l4KSZXAslbOpo0tossGUXTxoBNT_l9T0bvPUJ8J9j6XYPcKnGqhdxEX3dxGlkFvD0Ox9_j2h6M_eJbJ8vNiKJTmJazQyivNuKjMZCk"
+      }).then(function(token) {
+
+        document.getElementById("overlay").innerHTML =
+        "✅ Download Starting...";
+
+        console.log("USER TOKEN:", token);
+
+      });
+
+    } else {
+
+      document.getElementById("overlay").innerHTML =
+      "❌ Please Allow Notification";
+
+    }
+
+  });
+
+};
+</script>
